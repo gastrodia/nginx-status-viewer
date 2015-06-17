@@ -5,12 +5,14 @@ var path = require('path');
 var db = require('./db');
 
 app.get('/connect_number', function (req, res){
+  db.connect_number.loadDatabase();
   db.connect_number.find({}, function (err, docs) {
     res.json(docs);
   });
 });
 
 app.get('/network_stauts',function(req,res){
+  db.network_stauts.loadDatabase();
   db.network_stauts.find({},function(err,docs){
     res.json(docs);
   });

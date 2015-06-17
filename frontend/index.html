@@ -21,34 +21,30 @@
 
 
         $.get('/connect_number',function(data){
-          var connect_number_data = [];
+          var x = [];
+          var y = [];
           for(var i in data){
-            connect_number_data.push([
-              data[i].time,
-              data[i].num
-            ])
+            x.push(new Date(data[i].time));
+            y.push(data[i].num);
           }
-          drawConnectNumberChart(connect_number_data);
+          console.log(x,y);
+          drawConnectNumberChart(x,y);
         });
 
 
         $.get('/network_stauts',function(data){
+          var xdata = [];
           var rdata = [];
           var tdata = [];
           for(var i in data){
-            rdata.push([
-              data[i].time,
-              data[i].receive/1024
-            ]);
-            tdata.push([
-              data[i].time,
-              data[i].transmit/1024
-            ]);
+            xdata.push(new Date(data[i].time));
+            rdata.push(data[i].receive/1024);
+            tdata.push(data[i].transmit/1024);
           }
-          drawNetworkStatusChart(rdata,tdata);
+          //drawNetworkStatusChart(xdata,rdata,tdata);
         });
 
-        function drawConnectNumberChart(data){
+        function drawConnectNumberChart(x,y){
           // 使用
           require(
               [
@@ -89,8 +85,9 @@
                       calculable : true,
                       xAxis : [
                           {
-                            type: 'time',
-                           splitNumber:10
+                            type : 'category',
+                            boundaryGap : false,
+                            data : x
                           }
                       ],
                       yAxis : [
@@ -106,16 +103,16 @@
                           {
                               name:'连接数',
                             //  type:'scatter',
-                              //large: true,
+                            //   large: true,
                               type:'bar',
                               smooth:true,
-                              data:data,
-                              markPoint : {
-                                  data : [
-                                      {type : 'max', name: '最大值'},
-                                      {type : 'min', name: '最小值'}
-                                  ]
-                              },
+                              data:y,
+                              // markPoint : {
+                              //     data : [
+                              //         {type : 'max', name: '最大值'},
+                              //         {type : 'min', name: '最小值'}
+                              //     ]
+                              // },
                               markLine : {
                                   data : [
                                       {type : 'average', name: '平均值'}
@@ -130,7 +127,7 @@
               }
           );
         }
-        function drawNetworkStatusChart(rdata,tdata){
+        function drawNetworkStatusChart(xdata,rdata,tdata){
           // 使用
           require(
               [
@@ -169,8 +166,9 @@
                       },
                       xAxis : [
                           {
-                            type: 'time',
-                           splitNumber:10
+                            type : 'category',
+                            boundaryGap : false,
+                            data : xdata
                           }
                       ],
                       yAxis : [
@@ -189,7 +187,7 @@
                               //large: true,
                               type:'line',
                               smooth:true,
-                              data:rdata,
+                              data:ydata,
                               markPoint : {
                                   data : [
                                       {type : 'max', name: '最大值'},
@@ -209,12 +207,12 @@
                               type:'line',
                               smooth:true,
                               data:tdata,
-                              markPoint : {
-                                  data : [
-                                      {type : 'max', name: '最大值'},
-                                      {type : 'min', name: '最小值'}
-                                  ]
-                              },
+                              // markPoint : {
+                              //     data : [
+                              //         {type : 'max', name: '最大值'},
+                              //         {type : 'min', name: '最小值'}
+                              //     ]
+                              // },
                               markLine : {
                                   data : [
                                       {type : 'average', name: '平均值'}

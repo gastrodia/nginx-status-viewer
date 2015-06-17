@@ -4,7 +4,8 @@
   "dependencies": {
     "express": "^4.12.4",
     "nedb": "^1.1.2",
-    "node-proc": "0.0.1"
+    "node-proc": "0.0.1",
+    "procfs-stats": "0.0.4"
   },
   "devDependencies": {}
 }

@@ -15,30 +15,40 @@ function getConnectionNumber(port,callback){
 
 
 function recordNetWorkStatus(){
-  var procfs = require('procfs-stats');
-  var old = null;
-  setInterval(function(){
-    procfs.net(function(err,data){
-      console.log(data[0].Interface);
-      console.log(data[0].bytes);
-      var _new = data[0].bytes;
-      if(old){
-        var receive = _new.Receive - old.Receive;
-        var transmit = _new.Transmit - old.Transmit;
-        console.log('this second receive ' + receive + ' bytes data');
-        console.log('this second transmit ' + transmit + ' bytes data');
-        db.network_stauts.insert({
-          time:Date.now(),
-          receive:receive,
-          transmit:transmit
-        },function(err,newDocs){
-          console.log(err,newDocs);
-        })
-      }
-      old = _new;
-    });
 
-  },1000);
+    var procfs = require('procfs-stats');
+    var old = null;
+    setInterval(function(){
+      procfs.net(function(err,data){
+        try{
+          console.log(data[0].Interface);
+          console.log(data[0].bytes);
+          var _new = data[0].bytes;
+          if(old){
+            var receive = _new.Receive - old.Receive;
+            var transmit = _new.Transmit - old.Transmit;
+            console.log('this second receive ' + receive + ' bytes data');
+            console.log('this second transmit ' + transmit + ' bytes data');
+            db.network_stauts.insert({
+              time:Date.now(),
+              receive:receive,
+              transmit:transmit
+            },function(err,newDocs){
+              console.log(err,newDocs);
+            });
+          }
+
+          old = _new;
+        }catch(e){
+          console.log('this function may not work on windows and mac');
+        }
+
+
+      });
+
+    },1000);
+
+
 }
 
 function recordConnectionNumber(){
