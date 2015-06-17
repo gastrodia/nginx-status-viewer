@@ -5,17 +5,21 @@ var config = require('./config');
 var db = require('./db');
 
 app.get('/connect_number', function (req, res){
-  db.connect_number.loadDatabase();
-  db.connect_number.find({}, function (err, docs) {
-    res.json(docs);
+  db.connect_number.loadDatabase(function(err){
+    db.connect_number.find({}, function (err, docs) {
+      res.json(docs);
+    });
   });
+
 });
 
 app.get('/network_stauts',function(req,res){
-  db.network_stauts.loadDatabase();
-  db.network_stauts.find({},function(err,docs){
-    res.json(docs);
+  db.network_stauts.loadDatabase(function(err){
+    db.network_stauts.find({},function(err,docs){
+      res.json(docs);
+    });
   });
+
 });
 
 var frontend = path.join(__dirname,'../frontend');
