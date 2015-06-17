@@ -5,7 +5,7 @@ var config = require('./config');
 
 
 function getConnectionNumber(port,callback){
-  exec('netstat -nat|grep -i " ' + port + '"|wc -l',
+  exec('netstat -nat|grep -i "' + port + '"|wc -l',
     function (error, stdout, stderr) {
       var count = stdout*1;
       if(callback) callback(count);
