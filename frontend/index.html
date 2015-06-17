@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
     <meta charset="utf-8">
-    <title>ECharts</title>
+    <title>服务器网络状态</title>
 </head>
 
 <body>
@@ -141,8 +141,9 @@
               ],
               function (ec) {
                   // 基于准备好的dom，初始化echarts图表
-                  var myChart = ec.init(document.getElementById('network_stauts'));
-
+                  console.log('1')
+                  var myChart = ec.init(document.getElementById('network_status'));
+                  console.log('2')
                   option = {
                       title : {
                           text: '流量状态',
@@ -151,9 +152,7 @@
                       tooltip : {
                           trigger: 'axis'
                       },
-                      legend: {
-                          data:['receive','transmit']
-                      },
+
                       toolbox: {
                           show : true,
                           feature : {
@@ -168,7 +167,6 @@
                           start : 30,
                           end : 70
                       },
-                      calculable : true,
                       xAxis : [
                           {
                             type: 'time',
