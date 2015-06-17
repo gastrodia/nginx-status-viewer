@@ -104,8 +104,9 @@
                               name:'连接数',
                             //  type:'scatter',
                             //   large: true,
-                              type:'bar',
+                              type:'line',
                               smooth:true,
+                              itemStyle: {normal: {areaStyle: {type: 'default'}}},
                               data:y,
                               // markPoint : {
                               //     data : [
@@ -149,7 +150,9 @@
                       tooltip : {
                           trigger: 'axis'
                       },
-
+                      legend: {
+                          data:['receive','transmit']
+                      },
                       toolbox: {
                           show : true,
                           feature : {
@@ -159,6 +162,7 @@
                               saveAsImage : {show: true}
                           }
                       },
+
                       dataZoom: {
                           show: true,
                           start : 0,
@@ -188,6 +192,7 @@
                               type:'line',
                               smooth:true,
                               data:rdata,
+                              itemStyle: {normal: {areaStyle: {type: 'default'}}},
                               // markPoint : {
                               //     data : [
                               //         {type : 'max', name: '最大值'},
@@ -207,6 +212,7 @@
                               type:'line',
                               smooth:true,
                               data:tdata,
+                              itemStyle: {normal: {areaStyle: {type: 'default'}}},
                               // markPoint : {
                               //     data : [
                               //         {type : 'max', name: '最大值'},
