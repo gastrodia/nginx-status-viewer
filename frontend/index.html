@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <title>ECharts</title>
+</head>
+
+<body>
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="connect_number" style="height:400px"></div>
+    <div id="network_status" style="height:400px"></div>
+    <script src="./lib/echarts-2.2.4/build/dist/echarts.js"></script>
+    <script src="./lib/jquery/jquery-1.11.3.js"></script>
+    <script type="text/javascript">
+
+        // 路径配置
+        require.config({
+            paths: {
+                echarts: './lib/echarts-2.2.4/build/dist/'
+            }
+        });
+
+
+        $.get('/connect_number',function(data){
+          var connect_number_data = [];
+          for(var i in data){
+            connect_number_data.push([
+              data[i].time,
+              data[i].num
+            ])
+          }
+          drawConnectNumberChart(connect_number_data);
+        });
+
+
+        $.get('/network_stauts',function(data){
+          var rdata = [];
+          var tdata = [];
+          for(var i in data){
+            rdata.push([
+              data[i].time,
+              data[i].receive/1024
+            ]);
+            tdata.push([
+              data[i].time,
+              data[i].transmit/1024
+            ]);
+          }
+          drawNetworkStatusChart(rdata,tdata);
+        });
+
+        function drawConnectNumberChart(data){
+          // 使用
+          require(
+              [
+                  'echarts',
+                  'echarts/chart/bar', // 使用柱状图就加载bar模块，按需加载
+                  'echarts/chart/line',
+                  'echarts/chart/scatter'
+              ],
+              function (ec) {
+                  // 基于准备好的dom，初始化echarts图表
+                  var myChart = ec.init(document.getElementById('connect_number'));
+
+                  option = {
+                      title : {
+                          text: '连接状态',
+                          subtext: 'server_01'
+                      },
+                      tooltip : {
+                          trigger: 'axis'
+                      },
+                      legend: {
+                          data:['连接数']
+                      },
+                      toolbox: {
+                          show : true,
+                          feature : {
+                              dataView : {show: true, readOnly: false},
+                              magicType : {show: true, type: ['line','bar']},
+                              restore : {show: true},
+                              saveAsImage : {show: true}
+                          }
+                      },
+                      dataZoom: {
+                          show: true,
+                          start : 30,
+                          end : 70
+                      },
+                      calculable : true,
+                      xAxis : [
+                          {
+                            type: 'time',
+                           splitNumber:10
+                          }
+                      ],
+                      yAxis : [
+                          {
+                              type : 'value',
+                              axisLabel : {
+                                  formatter: '{value} 个连接'
+                              }
+                          }
+                      ],
+                      calculable : true,
+                      series : [
+                          {
+                              name:'连接数',
+                            //  type:'scatter',
+                              //large: true,
+                              type:'bar',
+                              smooth:true,
+                              data:data,
+                              markPoint : {
+                                  data : [
+                                      {type : 'max', name: '最大值'},
+                                      {type : 'min', name: '最小值'}
+                                  ]
+                              },
+                              markLine : {
+                                  data : [
+                                      {type : 'average', name: '平均值'}
+                                  ]
+                              }
+                          }
+                      ]
+                  };
+
+                  // 为echarts对象加载数据
+                  myChart.setOption(option);
+              }
+          );
+        }
+        function drawNetworkStatusChart(rdata,tdata){
+          // 使用
+          require(
+              [
+                  'echarts',
+                  'echarts/chart/bar', // 使用柱状图就加载bar模块，按需加载
+                  'echarts/chart/line',
+                  'echarts/chart/scatter'
+              ],
+              function (ec) {
+                  // 基于准备好的dom，初始化echarts图表
+                  var myChart = ec.init(document.getElementById('network_stauts'));
+
+                  option = {
+                      title : {
+                          text: '流量状态',
+                          subtext: 'server_01'
+                      },
+                      tooltip : {
+                          trigger: 'axis'
+                      },
+                      legend: {
+                          data:['receive','transmit']
+                      },
+                      toolbox: {
+                          show : true,
+                          feature : {
+                              dataView : {show: true, readOnly: false},
+                              magicType : {show: true, type: ['line','bar']},
+                              restore : {show: true},
+                              saveAsImage : {show: true}
+                          }
+                      },
+                      dataZoom: {
+                          show: true,
+                          start : 30,
+                          end : 70
+                      },
+                      calculable : true,
+                      xAxis : [
+                          {
+                            type: 'time',
+                           splitNumber:10
+                          }
+                      ],
+                      yAxis : [
+                          {
+                              type : 'value',
+                              axisLabel : {
+                                  formatter: '{value} kb/s'
+                              }
+                          }
+                      ],
+                      calculable : true,
+                      series : [
+                          {
+                              name:'receive',
+                            //  type:'scatter',
+                              //large: true,
+                              type:'line',
+                              smooth:true,
+                              data:rdata,
+                              markPoint : {
+                                  data : [
+                                      {type : 'max', name: '最大值'},
+                                      {type : 'min', name: '最小值'}
+                                  ]
+                              },
+                              markLine : {
+                                  data : [
+                                      {type : 'average', name: '平均值'}
+                                  ]
+                              }
+                          },
+                          {
+                              name:'transmit',
+                            //  type:'scatter',
+                              //large: true,
+                              type:'line',
+                              smooth:true,
+                              data:tdata,
+                              markPoint : {
+                                  data : [
+                                      {type : 'max', name: '最大值'},
+                                      {type : 'min', name: '最小值'}
+                                  ]
+                              },
+                              markLine : {
+                                  data : [
+                                      {type : 'average', name: '平均值'}
+                                  ]
+                              }
+                          }
+                      ]
+                  };
+
+                  // 为echarts对象加载数据
+                  myChart.setOption(option);
+              }
+          );
+        }
+
+
+    </script>
+</body>
