@@ -1,7 +1,7 @@
 var express = require('express');
 var app = express();
 var path = require('path');
-
+var config = require('./config');
 var db = require('./db');
 
 app.get('/connect_number', function (req, res){
@@ -22,7 +22,7 @@ var frontend = path.join(__dirname,'../frontend');
 console.log(frontend);
 app.use(express.static(frontend));
 
-var server = app.listen(3000, function () {
+var server = app.listen(config.server_port, function () {
 
   var host = server.address().address;
   var port = server.address().port;

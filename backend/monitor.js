@@ -1,11 +1,11 @@
 var exec = require('child_process').exec;
 var spawn = require('child_process').spawn;
 var db = require('./db');
-
+var config = require('./config');
 
 
 function getConnectionNumber(port,callback){
-  exec('netstat -nat|grep -i "3000"|wc -l',
+  exec('netstat -nat|grep -i " ' + port + '"|wc -l',
     function (error, stdout, stderr) {
       var count = stdout*1;
       if(callback) callback(count);
@@ -53,7 +53,7 @@ function recordNetWorkStatus(){
 
 function recordConnectionNumber(){
   setInterval(function(){
-    getConnectionNumber(3000,function(num){
+    getConnectionNumber(config.target_port,function(num){
       console.log('now connect_number is ' + num);
       db.connect_number.insert({
         time:Date.now(),
