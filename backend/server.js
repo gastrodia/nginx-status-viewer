@@ -7,7 +7,7 @@ var db = require('./db');
 
 
 //最多返回500条数据，且尽量让数据在值域区间内均匀分布
-var maxDataNumber = 500;
+var maxDataNumber = 200;
 
 function isExactDivision(m,n){
   return m/n == Math.round(m/2);
@@ -61,12 +61,12 @@ function getMaxArray2(totalArray){
   var _newArray = [];
   var index = totalArray.length - 1;
   for(var i=0;i<litteStepNumber;i++){
-    console.log(index);
+    //console.log(index);
     _newArray.push(totalArray[index]);
     index = index - litteStep - 1;
   }
   for(var i=0;i<bigStepNumber;i++){
-    console.log(index);
+    //console.log(index);
     _newArray.push(totalArray[index]);
     index = index - bigStep - 1;
   }
