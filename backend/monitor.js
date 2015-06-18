@@ -10,7 +10,7 @@ function getConnectionNumber(port,callback){
     //ss sport eq :80  |wc -l
     exec('ss sport eq :' + port + ' |wc -l',
       function (error, stdout, stderr) {
-        var count = stdout*1 - 38;
+        var count = stdout*1 - config.default_number;
         if(callback) callback(count);
     });
   }else{
