@@ -8,9 +8,9 @@ function getConnectionNumber(port,callback){
 
   if(process.platform == 'linux'){
     //ss sport eq :80  |wc -l
-    exec('ss sport eq :' + port + ' |wc -l',
+    exec('ss -t sport eq :' + port + ' |wc -l',
       function (error, stdout, stderr) {
-        var count = stdout*1 - config.default_number;
+        var count = stdout*1 - 1;
         if(callback) callback(count);
     });
   }else{
