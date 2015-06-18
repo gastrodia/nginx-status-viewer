@@ -5,6 +5,11 @@
 </head>
 
 <body>
+
+    <form>
+      <select id="target_port">
+      </select>
+    </form>
     <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
     <div id="connect_number" style="height:400px"></div>
     <div id="network_status" style="height:400px"></div>
@@ -19,30 +24,54 @@
             }
         });
 
+        //document.addEventListener('DOMContentLoaded', function() {alert("good")});
 
-        $.get('/connect_number',function(data){
-          var x = [];
-          var y = [];
-          for(var i in data){
-            x.push(new Date(data[i].time));
-            y.push(data[i].num);
-          }
-          console.log(x,y);
-          drawConnectNumberChart(x,y);
+        $(function(){
+
+          //port config
+
+          $.get('/target_ports',function(data){
+            var target = '#target_port';
+            for(var i in data){
+              var port = data[i];
+              $(target).append($('<option value="' + port + '">' + port + '</option>'))
+            }
+            $(target).on('change',function(){
+              drawTargetConnectNumberChar(this.value);
+            });
+            drawTargetConnectNumberChar(data[0]);
+          });
+
+
+
+
+          $.get('/network_stauts',function(data){
+            var xdata = [];
+            var rdata = [];
+            var tdata = [];
+            for(var i in data){
+              xdata.push(new Date(data[i].time));
+              rdata.push(data[i].receive/1024);
+              tdata.push(data[i].transmit/1024);
+            }
+            drawNetworkStatusChart(xdata,rdata,tdata);
+          });
+
         });
 
 
-        $.get('/network_stauts',function(data){
-          var xdata = [];
-          var rdata = [];
-          var tdata = [];
-          for(var i in data){
-            xdata.push(new Date(data[i].time));
-            rdata.push(data[i].receive/1024);
-            tdata.push(data[i].transmit/1024);
-          }
-          drawNetworkStatusChart(xdata,rdata,tdata);
-        });
+        function drawTargetConnectNumberChar(port){
+          $.get('/connect_number/' + port,function(data){
+            var x = [];
+            var y = [];
+            for(var i in data){
+              x.push(new Date(data[i].time));
+              y.push(data[i].num);
+            }
+            console.log(x,y);
+            drawConnectNumberChart(x,y);
+          });
+        }
 
         function drawConnectNumberChart(x,y){
           // 使用

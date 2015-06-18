@@ -4,14 +4,22 @@ var path = require('path');
 var config = require('./config');
 var db = require('./db');
 
-app.get('/connect_number', function (req, res){
+
+
+
+app.get('/connect_number/:port', function (req, res){
+  var port =  req.params.port * 1;
   db.connect_number.loadDatabase(function(err){
-    db.connect_number.find({}, function (err, docs) {
+    db.connect_number.find({port:port}, function (err, docs) {
       res.json(docs);
     });
   });
 
 });
+
+app.get('/target_ports',function(req,res){
+  res.json(config.target_ports);
+})
 
 app.get('/network_stauts',function(req,res){
   db.network_stauts.loadDatabase(function(err){
