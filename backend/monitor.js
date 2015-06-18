@@ -5,7 +5,7 @@ var config = require('./config');
 
 
 function getConnectionNumber(port,callback){
-
+  //最多返回500条数据
   if(process.platform == 'linux'){
     //ss sport eq :80  |wc -l
     exec('ss -t sport eq :' + port + ' |wc -l',
