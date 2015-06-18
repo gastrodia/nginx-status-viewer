@@ -7,8 +7,8 @@ var config = require('./config');
 function getConnectionNumber(port,callback){
 
   if(process.platform == 'linux'){
-    //ss dport eq :80  |wc -l
-    exec('ss dport eq :' + port + ' |wc -l',
+    //ss sport eq :80  |wc -l
+    exec('ss sport eq :' + port + ' |wc -l',
       function (error, stdout, stderr) {
         var count = stdout*1 - 38;
         if(callback) callback(count);
